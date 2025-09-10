@@ -1,0 +1,87 @@
+trigger:
+- main
+
+variables:
+  # --- SonarCloud (public project) ---
+  SONAR_ORG: 'ravi-on-cloud'
+  SONAR_PROJECT_KEY: 'ravi-on-cloud_proj7-web-public'
+  SONAR_TOKEN: 'SONAR_TOKEN'   # ⚠️ TEMPORARY, rotate afterwards
+  PY_VER: '3.12'
+
+  # --- Azure deploy ---
+  AZURE_SC: 'AZURE-SC'        # your Azure RM service connection name
+  WEBAPP_NAME: 'proj7-web'    # must match your App Service name
+
+stages:
+- stage: Build
+  displayName: Build & Sonar Analysis
+  jobs:
+  - job: build
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(PY_VER)'
+
+    - script: python -m pip install --upgrade pip
+      displayName: Upgrade pip
+
+    - script: |
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      displayName: Install requirements (if any)
+
+    # Ensure Java is available for sonar-scanner
+    - task: JavaToolInstaller@0
+      inputs:
+        versionSpec: '17'
+        jdkArchitectureOption: 'x64'
+        jdkSourceOption: 'PreInstalled'
+
+    # Run SonarCloud via CLI
+    - script: |
+        npm install -g sonar-scanner
+        sonar-scanner \
+          -Dsonar.host.url="https://sonarcloud.io" \
+          -Dsonar.organization="$(SONAR_ORG)" \
+          -Dsonar.projectKey="$(SONAR_PROJECT_KEY)" \
+          -Dsonar.sources="." \
+          -Dsonar.python.version="$(PY_VER)" \
+          -Dsonar.login=${SONAR_TOKEN}
+      displayName: SonarCloud Analysis (CLI)
+      env:
+        SONAR_TOKEN: $(SONAR_TOKEN)
+
+    # Package app as ZIP artifact
+    - script: |
+        mkdir -p buildout
+        cp -R * buildout/
+        cd buildout
+        zip -r ../drop.zip .
+      displayName: Create ZIP package
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: 'drop.zip'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+
+- stage: Deploy
+  displayName: Deploy to Azure Web App (Windows)
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - job: deploy
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - download: current
+      artifact: drop
+
+    - task: AzureWebApp@1
+      displayName: Deploy ZIP to WebApp
+      inputs:
+        azureSubscription: '$(AZURE_SC)'
+        appType: 'webAppLinux'
+        appName: '$(WEBAPP_NAME)'
+        package: '$(Pipeline.Workspace)/drop/drop.zip'

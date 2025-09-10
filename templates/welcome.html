@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Welcome Aboard!</title>
+
+    <style>
+      * { margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+      body, html { height:100%; }
+      .welcome-page {
+        min-height: 100vh;
+        display: flex; justify-content: center; align-items: center;
+        background: url('https://wallpapers.com/images/hd/one-piece-pictures-bjm9tdff9yzguoup.jpg') no-repeat center center fixed;
+        background-size: cover;
+      }
+      .overlay {
+        position: fixed; inset: 0; background: rgba(30,60,114,0.85);
+      }
+      .welcome-content {
+        position: relative; z-index: 1;
+        text-align: center; color: white; padding: 24px;
+        max-width: 700px; animation: fadeIn 1s ease;
+      }
+      .welcome-title {
+        font-size: 3rem; margin-bottom: 1rem; opacity:0; animation: slideUp 1s ease forwards;
+      }
+      .welcome-message {
+        font-size: 1.2rem; margin-bottom: 2rem; opacity:0; animation: slideUp 1s ease forwards 0.5s;
+      }
+      .home-button {
+        background: linear-gradient(90deg,#ff9966,#ff5e62);
+        padding: 1rem 3rem; display: inline-block; color:#fff; text-decoration:none;
+        border-radius: 10px; font-weight:700; opacity:0; animation: slideUp 1s ease forwards 1s;
+      }
+      @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+      @keyframes slideUp { from {opacity:0; transform: translateY(50px);} to {opacity:1; transform: translateY(0);} }
+    </style>
+  </head>
+  <body>
+    <div class="welcome-page">
+      <div class="overlay"></div>
+      <div class="welcome-content">
+        <h1 class="welcome-title">Welcome Aboard {{ name }}!</h1>
+        <p class="welcome-message">You are now part of the Pirate Journey! Set sail for adventure!</p>
+        <a href="{{ url_for('index') }}" class="home-button">Return to Registration</a>
+      </div>
+    </div>
+  </body>
+</html>
+

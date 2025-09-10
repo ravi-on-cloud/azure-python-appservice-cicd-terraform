@@ -1,0 +1,44 @@
+# ---------- Python ----------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+ENV/
+
+# Flask uploads (keep the folder with a .gitkeep if needed)
+static/uploads/*
+!static/uploads/.gitkeep
+
+# ---------- Terraform ----------
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+override.tf
+override.tf.json
+*.auto.tfvars.json
+# (Optional) ignore terraform.tfvars ONLY if it may contain secrets
+# terraform.tfvars
+
+# ---------- Tests / Coverage ----------
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# ---------- IDE / Editors ----------
+.vscode/
+.idea/
+*.code-workspace
+
+# ---------- Logs / Artifacts ----------
+*.log
+drop.zip
+
+# ---------- OS junk ----------
+.DS_Store
+Thumbs.db
