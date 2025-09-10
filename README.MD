@@ -1,21 +1,3 @@
-<p align="left">
-  <!-- Build (replace ORG/PROJECT/PIPELINE details) -->
-  <a href="https://dev.azure.com/<ORG>/<PROJECT>/_build/latest?definitionId=<PIPELINE_ID>&branchName=main">
-    <img alt="Build" src="https://dev.azure.com/<ORG>/<PROJECT>/_apis/build/status/<PIPELINE_NAME>?branchName=main">
-  </a>
-  <!-- License -->
-  <a href="LICENSE">
-    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-blue.svg">
-  </a>
-  <!-- SonarCloud -->
-  <a href="https://sonarcloud.io/summary/overall?id=ravi-on-cloud_proj7-web-public">
-    <img alt="Quality Gate" src="https://sonarcloud.io/api/project_badges/measure?project=ravi-on-cloud_proj7-web-public&metric=alert_status">
-  </a>
-  <a href="https://sonarcloud.io/summary/overall?id=ravi-on-cloud_proj7-web-public">
-    <img alt="Coverage" src="https://sonarcloud.io/api/project_badges/measure?project=ravi-on-cloud_proj7-web-public&metric=coverage">
-  </a>
-</p>
-
 # Azure Python App Service CI/CD with Terraform
 
 Flask web app deployed to **Azure App Service (Linux, Python 3.12)** via **Azure DevOps**; infrastructure provisioned with **Terraform**; quality checks via **SonarCloud**.
